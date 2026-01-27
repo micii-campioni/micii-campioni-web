@@ -1,26 +1,497 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   MICII CAMPIONI DESIGN SYSTEM
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties (Design Tokens)
+   -------------------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* LAGOON - Primary Brand Color */
+  --color-lagoon-50: #f0fdfb;
+  --color-lagoon-100: #ccfbf4;
+  --color-lagoon-200: #99f6ea;
+  --color-lagoon-300: #5eeadb;
+  --color-lagoon-400: #2dd4c4;
+  --color-lagoon-500: #14b8a6;
+  --color-lagoon-600: #0d9488;
+  --color-lagoon-700: #0f766e;
+  --color-lagoon-800: #115e59;
+  --color-lagoon-900: #134e4a;
+  --color-lagoon-950: #042f2e;
+
+  /* CORAL - Accent Color */
+  --color-coral-50: #fff7ed;
+  --color-coral-100: #ffedd5;
+  --color-coral-200: #fed7aa;
+  --color-coral-300: #fdba74;
+  --color-coral-400: #fb923c;
+  --color-coral-500: #f97316;
+  --color-coral-600: #ea580c;
+  --color-coral-700: #c2410c;
+  --color-coral-800: #9a3412;
+  --color-coral-900: #7c2d12;
+  --color-coral-950: #431407;
+
+  /* SAND - Neutral Warm */
+  --color-sand-50: #fafaf9;
+  --color-sand-100: #f5f5f4;
+  --color-sand-200: #e7e5e4;
+  --color-sand-300: #d6d3d1;
+  --color-sand-400: #a8a29e;
+  --color-sand-500: #78716c;
+  --color-sand-600: #57534e;
+  --color-sand-700: #44403c;
+  --color-sand-800: #292524;
+  --color-sand-900: #1c1917;
+  --color-sand-950: #0c0a09;
+
+  /* Semantic Colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: var(--color-lagoon-500);
+
+  /* Background Colors */
+  --bg-primary: var(--color-sand-50);
+  --bg-secondary: #ffffff;
+  --bg-tertiary: var(--color-sand-100);
+  --bg-inverse: var(--color-lagoon-950);
+  --bg-accent: var(--color-lagoon-50);
+
+  /* Text Colors */
+  --text-primary: var(--color-sand-900);
+  --text-secondary: var(--color-sand-600);
+  --text-muted: var(--color-sand-400);
+  --text-inverse: var(--color-sand-50);
+  --text-brand: var(--color-lagoon-600);
+
+  /* Interactive Colors */
+  --interactive-primary: var(--color-lagoon-500);
+  --interactive-primary-hover: var(--color-lagoon-600);
+  --interactive-secondary: var(--color-coral-500);
+  --interactive-secondary-hover: var(--color-coral-600);
+
+  /* Spacing (4px base) */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  --shadow-lagoon: 0 4px 14px 0 rgba(20, 184, 166, 0.25);
+  --shadow-coral: 0 4px 14px 0 rgba(249, 115, 22, 0.25);
+
+  /* Z-Index Scale */
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-header: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-toast: 800;
+  --z-max: 999;
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+/* --------------------------------------------------------------------------
+   Tailwind Theme Configuration (v4)
+   -------------------------------------------------------------------------- */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-lagoon-50: var(--color-lagoon-50);
+  --color-lagoon-100: var(--color-lagoon-100);
+  --color-lagoon-200: var(--color-lagoon-200);
+  --color-lagoon-300: var(--color-lagoon-300);
+  --color-lagoon-400: var(--color-lagoon-400);
+  --color-lagoon-500: var(--color-lagoon-500);
+  --color-lagoon-600: var(--color-lagoon-600);
+  --color-lagoon-700: var(--color-lagoon-700);
+  --color-lagoon-800: var(--color-lagoon-800);
+  --color-lagoon-900: var(--color-lagoon-900);
+  --color-lagoon-950: var(--color-lagoon-950);
+
+  --color-coral-50: var(--color-coral-50);
+  --color-coral-100: var(--color-coral-100);
+  --color-coral-200: var(--color-coral-200);
+  --color-coral-300: var(--color-coral-300);
+  --color-coral-400: var(--color-coral-400);
+  --color-coral-500: var(--color-coral-500);
+  --color-coral-600: var(--color-coral-600);
+  --color-coral-700: var(--color-coral-700);
+  --color-coral-800: var(--color-coral-800);
+  --color-coral-900: var(--color-coral-900);
+  --color-coral-950: var(--color-coral-950);
+
+  --color-sand-50: var(--color-sand-50);
+  --color-sand-100: var(--color-sand-100);
+  --color-sand-200: var(--color-sand-200);
+  --color-sand-300: var(--color-sand-300);
+  --color-sand-400: var(--color-sand-400);
+  --color-sand-500: var(--color-sand-500);
+  --color-sand-600: var(--color-sand-600);
+  --color-sand-700: var(--color-sand-700);
+  --color-sand-800: var(--color-sand-800);
+  --color-sand-900: var(--color-sand-900);
+  --color-sand-950: var(--color-sand-950);
+
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+
+  /* Fonts */
+  --font-heading: var(--font-plus-jakarta);
+  --font-body: var(--font-inter);
+
+  /* Border Radius */
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* --------------------------------------------------------------------------
+   Base Styles
+   -------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --------------------------------------------------------------------------
+   Focus States (Accessibility)
+   -------------------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 3px solid var(--color-coral-400);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced Motion (Accessibility)
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Skip Link (Accessibility)
+   -------------------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: var(--z-max);
+  padding: var(--space-3) var(--space-6);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+  background: var(--color-lagoon-600);
+  border-radius: var(--radius-lg);
+  transition: top var(--duration-fast) var(--ease-out);
+}
+
+.skip-link:focus {
+  top: var(--space-4);
+}
+
+/* --------------------------------------------------------------------------
+   Typography Utilities
+   -------------------------------------------------------------------------- */
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Prose (Rich Text Content)
+   -------------------------------------------------------------------------- */
+
+.prose {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.prose > * + * {
+  margin-top: 1.25rem;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose a {
+  color: var(--color-lagoon-600);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.prose a:hover {
+  color: var(--color-lagoon-700);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose ul li::marker {
+  color: var(--color-lagoon-500);
+}
+
+.prose ol li::marker {
+  color: var(--color-lagoon-600);
+  font-weight: 600;
+}
+
+.prose blockquote {
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--color-lagoon-500);
+  background: var(--color-lagoon-50);
+  border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+  font-style: italic;
+  color: var(--color-lagoon-800);
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-2xl);
+  margin: 1.5rem 0;
+}
+
+.prose hr {
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 1px solid var(--color-sand-200);
+}
+
+/* --------------------------------------------------------------------------
+   Animations
+   -------------------------------------------------------------------------- */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.animate-fade-up {
+  animation: fadeUp var(--duration-slow) var(--ease-out);
+}
+
+.animate-spin {
+  animation: spin 0.8s linear infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Print Styles
+   -------------------------------------------------------------------------- */
+
+@media print {
+  * {
+    background: white !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    color: black !important;
+    font-size: 12pt;
+  }
+
+  .no-print,
+  nav,
+  footer,
+  .skip-link {
+    display: none !important;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
 }

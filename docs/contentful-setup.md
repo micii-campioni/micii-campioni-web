@@ -66,6 +66,43 @@ Create these content models in the exact order listed (due to reference dependen
 | Field ID | camelCase (e.g., `metaTitle`) |
 | Field Name | Title Case (e.g., "Meta Title") |
 
+### Field Type Reference
+
+When adding fields in the Contentful UI, use this mapping:
+
+| This doc says | In UI, click | Then select/configure |
+|---------------|--------------|----------------------|
+| **Short text** | Text | Short text |
+| **Long text** | Text | Long text |
+| **Long text (Markdown)** | Text | Long text → Appearance: **Markdown** |
+| **Number** | Number | Decimal or Integer |
+| **Media** | Media | One file |
+| **Media (many)** | Media | Many files |
+| **Rich text** | Rich text | - |
+| **Boolean** | Boolean | - |
+| **Date** | Date and time | Date only |
+| **JSON** | JSON object | - |
+| **Reference** | Reference | One reference |
+| **Reference (many)** | Reference | Many references |
+| **Location** | Location | - |
+
+**Note:** For dropdown fields (like `widgetType`), use **Text → Short text** and add validation with "Accept only specified values".
+
+### Important: Markdown vs Rich Text Fields
+
+This schema uses **two approaches** for formatted text content:
+
+| Field Type | Format | When to Use | Content Population |
+|------------|--------|-------------|-------------------|
+| **Long text (Markdown)** | Plain text with Markdown syntax | Simple content: FAQs, descriptions, bios | Copy-paste directly from `content-population.md` |
+| **Rich text** | Contentful JSON Document | Complex content needing embedded assets | Use WYSIWYG editor in Contentful |
+
+**Markdown fields** (most content): You can copy-paste content directly from `content-population.md`. The Markdown syntax (`**bold**`, `- lists`, etc.) will render correctly.
+
+**Rich text fields** (only `Page.content` and `Service.content`): Use Contentful's visual editor. The content in `content-population.md` shows the structure, but you'll format using the toolbar buttons.
+
+To set Markdown appearance: Field settings → Appearance tab → Select **Markdown**.
+
 ---
 
 ### 3.1 SiteSettings (Create First - Singleton)
@@ -74,29 +111,28 @@ Create these content models in the exact order listed (due to reference dependen
 **Name:** `Site Settings`
 **Description:** Global site configuration. Only create ONE entry.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `internalName` | Internal Name | Symbol | Yes | Single line | - | Internal identifier (e.g., "Main Site Settings") |
-| `siteName` | Site Name | Symbol | Yes | Single line | Max 50 chars | Display name of the website |
-| `tagline` | Tagline | Symbol | No | Single line | Max 100 chars | Site subtitle/tagline |
-| `logo` | Logo | Asset | Yes | Asset card | Image only | Main logo (color version) |
-| `logoWhite` | Logo (White) | Asset | No | Asset card | Image only | White/inverted logo for dark backgrounds |
-| `favicon` | Favicon | Asset | No | Asset card | Image only | Site favicon (32x32 PNG or ICO) |
-| `anniversaryText` | Anniversary Text | Symbol | No | Single line | Max 50 chars | e.g., "17 ani de Micii Campioni" |
-| `anniversaryActive` | Show Anniversary Banner | Boolean | Yes | Boolean | Default: false | Toggle anniversary banner visibility |
-| `phone` | Phone Number | Symbol | Yes | Single line | Regex: `^[0-9\-\+\s]+$` | Contact phone (e.g., "0756-119-119") |
-| `email` | Email Address | Symbol | Yes | Single line | Email format | Contact email address |
-| `address` | Address | Text | Yes | Markdown | - | Full street address |
-| `gpsLatitude` | GPS Latitude | Number | No | Number | -90 to 90 | Map marker latitude |
-| `gpsLongitude` | GPS Longitude | Number | No | Number | -180 to 180 | Map marker longitude |
-| `facebookUrl` | Facebook URL | Symbol | No | Single line | URL format | Facebook page URL |
-| `twitterUrl` | Twitter URL | Symbol | No | Single line | URL format | Twitter/X profile URL |
-| `instagramUrl` | Instagram URL | Symbol | No | Single line | URL format | Instagram profile URL |
-| `scheduleWeekdays` | Schedule (Weekdays) | Symbol | No | Single line | Max 30 chars | e.g., "10:00 - 20:00" |
-| `scheduleSaturday` | Schedule (Saturday) | Symbol | No | Single line | Max 30 chars | e.g., "09:00 - 14:00" |
-| `scheduleSunday` | Schedule (Sunday) | Symbol | No | Single line | Max 30 chars | e.g., "Închis" |
-| `footerCopyright` | Footer Copyright | Symbol | No | Single line | Max 100 chars | Copyright text (year auto-updates in code) |
-| `defaultMetaDescription` | Default Meta Description | Text | No | Multi-line | Max 160 chars | Fallback SEO description |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `internalName` | Internal Name | Short text | Yes | - | Internal identifier (e.g., "Main Site Settings") |
+| `siteName` | Site Name | Short text | Yes | Max 50 chars | Display name of the website |
+| `tagline` | Tagline | Short text | No | Max 100 chars | Site subtitle/tagline |
+| `logo` | Logo | Media | Yes | Image only | Main logo (color version) |
+| `logoWhite` | Logo (White) | Media | No | Image only | White/inverted logo for dark backgrounds |
+| `favicon` | Favicon | Media | No | Image only | Site favicon (32x32 PNG or ICO) |
+| `anniversaryText` | Anniversary Text | Short text | No | Max 50 chars | e.g., "17 ani de Micii Campioni" |
+| `anniversaryActive` | Show Anniversary Banner | Boolean | Yes | Default: false | Toggle anniversary banner visibility |
+| `phone` | Phone Number | Short text | Yes | Regex: `^[0-9\-\+\s]+$` | Contact phone (e.g., "0756-119-119") |
+| `email` | Email Address | Short text | Yes | Email format | Contact email address |
+| `address` | Address | Long text | Yes | - | Full street address |
+| `location` | Location | Location | No | - | Map marker (latitude/longitude) |
+| `facebookUrl` | Facebook URL | Short text | No | URL format | Facebook page URL |
+| `twitterUrl` | Twitter URL | Short text | No | URL format | Twitter/X profile URL |
+| `instagramUrl` | Instagram URL | Short text | No | URL format | Instagram profile URL |
+| `scheduleWeekdays` | Schedule (Weekdays) | Short text | No | Max 30 chars | e.g., "10:00 - 20:00" |
+| `scheduleSaturday` | Schedule (Saturday) | Short text | No | Max 30 chars | e.g., "09:00 - 14:00" |
+| `scheduleSunday` | Schedule (Sunday) | Short text | No | Max 30 chars | e.g., "Închis" |
+| `footerCopyright` | Footer Copyright | Short text | No | Max 100 chars | Copyright text (year auto-updates in code) |
+| `defaultMetaDescription` | Default Meta Description | Long text | No | Max 160 chars | Fallback SEO description |
 
 ---
 
@@ -106,11 +142,11 @@ Create these content models in the exact order listed (due to reference dependen
 **Name:** `Navigation`
 **Description:** Menu structure for header and footer.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `internalName` | Internal Name | Symbol | Yes | Single line | Unique | e.g., "Header Navigation", "Footer Navigation" |
-| `location` | Location | Symbol | Yes | Dropdown | Values: `header`, `footer` | Where this menu appears |
-| `items` | Menu Items | JSON | Yes | JSON editor | - | Menu structure (see JSON schema below) |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `internalName` | Internal Name | Short text | Yes | Unique | e.g., "Header Navigation", "Footer Navigation" |
+| `location` | Location | Short text | Yes | Accept only: `header`, `footer` | Where this menu appears |
+| `items` | Menu Items | JSON | Yes | - | Menu structure (see JSON schema below) |
 
 **Menu Items JSON Schema:**
 ```json
@@ -203,17 +239,17 @@ Create these content models in the exact order listed (due to reference dependen
 **Name:** `Carousel Slide`
 **Description:** Homepage hero carousel slides.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `internalName` | Internal Name | Symbol | Yes | Single line | - | Internal identifier (e.g., "Slide 1 - Metoda Sultana") |
-| `badge` | Badge Text | Symbol | No | Single line | Max 30 chars | Small text above title (e.g., "DIN 2001") |
-| `title` | Title | Symbol | Yes | Single line | Max 80 chars | Main headline |
-| `subtitle` | Subtitle | Text | No | Multi-line (3 rows) | Max 200 chars | Description text below title |
-| `backgroundImage` | Background Image | Asset | Yes | Asset card | Image only, min 1920x800 | Full-width background (recommend 1920x1080) |
-| `ctaText` | Button Text | Symbol | No | Single line | Max 30 chars | Call-to-action button text |
-| `ctaLink` | Button Link | Symbol | No | Single line | URL path | Internal link (e.g., "/servicii/metoda-sultana") |
-| `order` | Display Order | Integer | Yes | Number | 1-10 | Order in carousel (1 = first) |
-| `active` | Active | Boolean | Yes | Boolean | Default: true | Show/hide this slide |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `internalName` | Internal Name | Short text | Yes | - | Internal identifier (e.g., "Slide 1 - Metoda Sultana") |
+| `badge` | Badge Text | Short text | No | Max 30 chars | Small text above title (e.g., "DIN 2001") |
+| `title` | Title | Short text | Yes | Max 80 chars | Main headline |
+| `subtitle` | Subtitle | Long text | No | Max 200 chars | Description text below title |
+| `backgroundImage` | Background Image | Media | Yes | Image only, min 1920x800 | Full-width background (recommend 1920x1080) |
+| `ctaText` | Button Text | Short text | No | Max 30 chars | Call-to-action button text |
+| `ctaLink` | Button Link | Short text | No | URL path | Internal link (e.g., "/servicii/metoda-sultana") |
+| `order` | Display Order | Number | Yes | Integer, 1-10 | Order in carousel (1 = first) |
+| `active` | Active | Boolean | Yes | Default: true | Show/hide this slide |
 
 ---
 
@@ -223,14 +259,14 @@ Create these content models in the exact order listed (due to reference dependen
 **Name:** `Testimonial`
 **Description:** Parent testimonials and endorsements.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `authorName` | Author Name | Symbol | Yes | Single line | Max 100 chars | Full name of the person |
-| `authorTitle` | Author Title | Symbol | No | Single line | Max 150 chars | Role/affiliation (e.g., "Președinte Federația Română de Gimnastică Ritmică") |
-| `quote` | Quote | Text | Yes | Multi-line (6 rows) | Min 20, Max 1000 chars | The testimonial text |
-| `photo` | Photo | Asset | No | Asset card | Image only | Optional headshot (square recommended) |
-| `featured` | Featured | Boolean | Yes | Boolean | Default: false | Show on homepage carousel |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Order in list (1 = first) |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `authorName` | Author Name | Short text | Yes | Max 100 chars | Full name of the person |
+| `authorTitle` | Author Title | Short text | No | Max 150 chars | Role/affiliation (e.g., "Președinte Federația Română de Gimnastică Ritmică") |
+| `quote` | Quote | Long text | Yes | Min 20, Max 1000 chars | The testimonial text |
+| `photo` | Photo | Media | No | Image only | Optional headshot (square recommended) |
+| `featured` | Featured | Boolean | Yes | Default: false | Show on homepage carousel |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Order in list (1 = first) |
 
 ---
 
@@ -240,16 +276,16 @@ Create these content models in the exact order listed (due to reference dependen
 **Name:** `Team Member`
 **Description:** Staff and instructors.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `name` | Full Name | Symbol | Yes | Single line | Max 100 chars | Person's full name |
-| `role` | Role/Title | Symbol | Yes | Single line | Max 100 chars | Job title (e.g., "Fondator și Director") |
-| `bio` | Biography | Rich Text | No | Rich text | Enable: headings, bold, italic, lists, links | Full biography |
-| `shortBio` | Short Bio | Text | No | Multi-line (3 rows) | Max 200 chars | Brief description for cards |
-| `photo` | Photo | Asset | Yes | Asset card | Image only | Profile photo (square, min 400x400) |
-| `certifications` | Certifications | Array of Symbols | No | Tags | - | List of certifications/qualifications |
-| `isFounder` | Founder | Boolean | Yes | Boolean | Default: false | Highlight as founder |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Order in team list (1 = first) |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `name` | Full Name | Short text | Yes | Max 100 chars | Person's full name |
+| `role` | Role/Title | Short text | Yes | Max 100 chars | Job title (e.g., "Fondator și Director") |
+| `bio` | Biography | Long text | No | Appearance: Markdown | Full biography (supports Markdown) |
+| `shortBio` | Short Bio | Long text | No | Max 200 chars | Brief description for cards |
+| `photo` | Photo | Media | Yes | Image only | Profile photo (square, min 400x400) |
+| `certifications` | Certifications | Short text (list) | No | - | List of certifications/qualifications (enable "List" option) |
+| `isFounder` | Founder | Boolean | Yes | Default: false | Highlight as founder |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Order in team list (1 = first) |
 
 ---
 
@@ -259,15 +295,15 @@ Create these content models in the exact order listed (due to reference dependen
 **Name:** `Widget`
 **Description:** Sidebar content blocks.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `internalName` | Internal Name | Symbol | Yes | Single line | Unique | e.g., "Safety Highlight Widget" |
-| `title` | Title | Symbol | Yes | Single line | Max 60 chars | Widget heading |
-| `icon` | Icon | Asset | No | Asset card | Image only | Optional icon/image |
-| `content` | Content | Rich Text | No | Rich text | Enable: bold, italic, lists, links | Widget body content |
-| `widgetType` | Widget Type | Symbol | Yes | Dropdown | Values: `info`, `highlight`, `cta`, `contact` | Styling variant |
-| `ctaText` | CTA Button Text | Symbol | No | Single line | Max 30 chars | Optional button text |
-| `ctaLink` | CTA Button Link | Symbol | No | Single line | URL path | Optional button link |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `internalName` | Internal Name | Short text | Yes | Unique | e.g., "Safety Highlight Widget" |
+| `title` | Title | Short text | Yes | Max 60 chars | Widget heading |
+| `icon` | Icon | Media | No | Image only | Optional icon/image |
+| `content` | Content | Long text | No | Appearance: Markdown | Widget body content (supports Markdown) |
+| `widgetType` | Widget Type | Short text | Yes | Accept only: `info`, `highlight`, `cta`, `contact` | Styling variant |
+| `ctaText` | CTA Button Text | Short text | No | Max 30 chars | Optional button text |
+| `ctaLink` | CTA Button Link | Short text | No | URL path | Optional button link |
 
 **Widget Types:**
 - `info` - Standard informational sidebar box
@@ -283,19 +319,19 @@ Create these content models in the exact order listed (due to reference dependen
 **Name:** `Page`
 **Description:** Generic content pages.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Page Title | Symbol | Yes | Single line | Max 100 chars | Page heading (H1) |
-| `slug` | URL Slug | Symbol | Yes | Slug | Unique, URL-safe | URL path segment (e.g., "istoric") |
-| `metaTitle` | SEO Title | Symbol | No | Single line | Max 60 chars | Browser tab title (falls back to title) |
-| `metaDescription` | SEO Description | Text | No | Multi-line (2 rows) | Max 160 chars | Search result description |
-| `heroImage` | Hero Image | Asset | No | Asset card | Image only | Optional page header image |
-| `heroImageAlt` | Hero Image Alt | Symbol | No | Single line | Max 125 chars | Accessibility description for hero |
-| `content` | Main Content | Rich Text | Yes | Rich text | Enable: all formatting, embedded assets | Page body content |
-| `sidebarWidgets` | Sidebar Widgets | Array of References | No | Entry links list | Link to: Widget | Widgets to display in sidebar |
-| `parentPage` | Parent Page | Reference | No | Entry link | Link to: Page | Parent for breadcrumb navigation |
-| `showInSitemap` | Show in Sitemap | Boolean | Yes | Boolean | Default: true | Include in HTML sitemap |
-| `publishedAt` | Publish Date | Date | No | Date only | - | For ordering/display purposes |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Page Title | Short text | Yes | Max 100 chars | Page heading (H1) |
+| `slug` | URL Slug | Short text | Yes | Unique, URL-safe | URL path segment (e.g., "istoric") |
+| `metaTitle` | SEO Title | Short text | No | Max 60 chars | Browser tab title (falls back to title) |
+| `metaDescription` | SEO Description | Long text | No | Max 160 chars | Search result description |
+| `heroImage` | Hero Image | Media | No | Image only | Optional page header image |
+| `heroImageAlt` | Hero Image Alt | Short text | No | Max 125 chars | Accessibility description for hero |
+| `content` | Main Content | Rich text | Yes | Enable: all formatting, embedded assets | Page body content |
+| `sidebarWidgets` | Sidebar Widgets | Reference (many) | No | Link to: Widget | Widgets to display in sidebar |
+| `parentPage` | Parent Page | Reference | No | Link to: Page | Parent for breadcrumb navigation |
+| `showInSitemap` | Show in Sitemap | Boolean | Yes | Default: true | Include in HTML sitemap |
+| `publishedAt` | Publish Date | Date | No | - | For ordering/display purposes |
 
 **Rich Text Configuration:**
 Enable these node types:
@@ -317,22 +353,22 @@ Enable these node types:
 **Name:** `Service`
 **Description:** Main service offerings.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Service Name | Symbol | Yes | Single line | Max 80 chars | Service title |
-| `slug` | URL Slug | Symbol | Yes | Slug | Unique, URL-safe | URL segment (e.g., "metoda-sultana") |
-| `shortDescription` | Short Description | Text | Yes | Multi-line (3 rows) | Max 200 chars | Card preview text |
-| `icon` | Icon | Asset | No | Asset card | Image/SVG | Service icon for cards |
-| `heroImage` | Hero Image | Asset | No | Asset card | Image only | Service page header image |
-| `content` | Main Content | Rich Text | Yes | Rich text | Enable: all | Full service description |
-| `metaTitle` | SEO Title | Symbol | No | Single line | Max 60 chars | Browser tab title |
-| `metaDescription` | SEO Description | Text | No | Multi-line (2 rows) | Max 160 chars | Search result description |
-| `tabs` | Content Tabs | Array of References | No | Entry links list | Link to: ServiceTab | Tabbed content sections |
-| `ageGroups` | Age Groups | Array of References | No | Entry links list | Link to: AgeGroup | For Educație Acvatică only |
-| `sidebarWidgets` | Sidebar Widgets | Array of References | No | Entry links list | Link to: Widget | Sidebar content |
-| `relatedServices` | Related Services | Array of References | No | Entry links list | Link to: Service | Cross-promotion |
-| `order` | Display Order | Integer | Yes | Number | 1-20 | Order in service lists |
-| `featured` | Featured | Boolean | Yes | Boolean | Default: false | Show on homepage |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Service Name | Short text | Yes | Max 80 chars | Service title |
+| `slug` | URL Slug | Short text | Yes | Unique, URL-safe | URL segment (e.g., "metoda-sultana") |
+| `shortDescription` | Short Description | Long text | Yes | Max 200 chars | Card preview text |
+| `icon` | Icon | Media | No | Image/SVG | Service icon for cards |
+| `heroImage` | Hero Image | Media | No | Image only | Service page header image |
+| `content` | Main Content | Rich text | Yes | Enable: all | Full service description |
+| `metaTitle` | SEO Title | Short text | No | Max 60 chars | Browser tab title |
+| `metaDescription` | SEO Description | Long text | No | Max 160 chars | Search result description |
+| `tabs` | Content Tabs | Reference (many) | No | Link to: ServiceTab | Tabbed content sections |
+| `ageGroups` | Age Groups | Reference (many) | No | Link to: AgeGroup | For Educație Acvatică only |
+| `sidebarWidgets` | Sidebar Widgets | Reference (many) | No | Link to: Widget | Sidebar content |
+| `relatedServices` | Related Services | Reference (many) | No | Link to: Service | Cross-promotion |
+| `order` | Display Order | Number | Yes | Integer, 1-20 | Order in service lists |
+| `featured` | Featured | Boolean | Yes | Default: false | Show on homepage |
 
 ---
 
@@ -342,11 +378,11 @@ Enable these node types:
 **Name:** `Service Tab`
 **Description:** Tabbed content sections within services.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Tab Title | Symbol | Yes | Single line | Max 40 chars | Tab label text |
-| `content` | Tab Content | Rich Text | Yes | Rich text | Enable: all | Content displayed when tab is active |
-| `order` | Display Order | Integer | Yes | Number | 1-10 | Order of tabs (1 = first) |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Tab Title | Short text | Yes | Max 40 chars | Tab label text |
+| `content` | Tab Content | Long text | Yes | Appearance: Markdown | Content displayed when tab is active (supports Markdown) |
+| `order` | Display Order | Number | Yes | Integer, 1-10 | Order of tabs (1 = first) |
 
 ---
 
@@ -356,17 +392,17 @@ Enable these node types:
 **Name:** `Age Group`
 **Description:** Aquatic education programs by age.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `name` | Program Name | Symbol | Yes | Single line | Max 50 chars | e.g., "PRO-BEBE", "JUNIORI" |
-| `ageRange` | Age Range | Symbol | Yes | Single line | Max 30 chars | e.g., "4/6 luni - 1 an" |
-| `duration` | Session Duration | Symbol | No | Single line | Max 40 chars | e.g., "Maximum 35 minute" |
-| `description` | Description | Rich Text | No | Rich text | Enable: paragraphs, bold, italic, lists | General program description |
-| `psychologicalDevelopment` | Psychological Development | Rich Text | No | Rich text | Enable: paragraphs, lists | Child development information |
-| `objectives` | Objectives | Rich Text | No | Rich text | Enable: lists | Learning objectives bullet points |
-| `icon` | Icon | Asset | No | Asset card | Image/SVG | Age group icon |
-| `color` | Accent Color | Symbol | No | Single line | Hex format | e.g., "#14b8a6" for styling |
-| `order` | Display Order | Integer | Yes | Number | 1-10 | Order in program list |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `name` | Program Name | Short text | Yes | Max 50 chars | e.g., "PRO-BEBE", "JUNIORI" |
+| `ageRange` | Age Range | Short text | Yes | Max 30 chars | e.g., "4/6 luni - 1 an" |
+| `duration` | Session Duration | Short text | No | Max 40 chars | e.g., "Maximum 35 minute" |
+| `description` | Description | Long text | No | Appearance: Markdown | General program description (supports Markdown) |
+| `psychologicalDevelopment` | Psychological Development | Long text | No | Appearance: Markdown | Child development information (supports Markdown) |
+| `objectives` | Objectives | Long text | No | Appearance: Markdown | Learning objectives bullet points (supports Markdown) |
+| `icon` | Icon | Media | No | Image/SVG | Age group icon |
+| `color` | Accent Color | Short text | No | Hex format | e.g., "#14b8a6" for styling |
+| `order` | Display Order | Number | Yes | Integer, 1-10 | Order in program list |
 
 ---
 
@@ -376,15 +412,15 @@ Enable these node types:
 **Name:** `Course Module`
 **Description:** Școala Părinților course modules.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Module Title | Symbol | Yes | Single line | Max 60 chars | e.g., "Lamaze", "Neonatologie" |
-| `subtitle` | Subtitle | Symbol | No | Single line | Max 100 chars | Brief descriptor |
-| `sessions` | Sessions Info | Symbol | No | Single line | Max 40 chars | e.g., "6 sesiuni x 2 ore" |
-| `instructor` | Instructor | Reference | No | Entry link | Link to: TeamMember | Course instructor |
-| `content` | Full Content | Rich Text | Yes | Rich text | Enable: all | Complete module content |
-| `objectives` | Learning Objectives | Rich Text | No | Rich text | Enable: lists | What participants will learn |
-| `order` | Display Order | Integer | Yes | Number | 1-10 | Order in course tabs |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Module Title | Short text | Yes | Max 60 chars | e.g., "Lamaze", "Neonatologie" |
+| `subtitle` | Subtitle | Short text | No | Max 100 chars | Brief descriptor |
+| `sessions` | Sessions Info | Short text | No | Max 40 chars | e.g., "6 sesiuni x 2 ore" |
+| `instructor` | Instructor | Reference | No | Link to: TeamMember | Course instructor |
+| `content` | Full Content | Long text | Yes | Appearance: Markdown | Complete module content (supports Markdown) |
+| `objectives` | Learning Objectives | Long text | No | Appearance: Markdown | What participants will learn (supports Markdown) |
+| `order` | Display Order | Number | Yes | Integer, 1-10 | Order in course tabs |
 
 ---
 
@@ -394,13 +430,13 @@ Enable these node types:
 **Name:** `Timeline Event`
 **Description:** Historical milestones for Istoric page.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `year` | Year | Symbol | Yes | Single line | Max 10 chars | e.g., "1981", "2000-2001" |
-| `title` | Event Title | Symbol | No | Single line | Max 100 chars | Brief event title (optional) |
-| `description` | Description | Text | Yes | Multi-line (4 rows) | Max 500 chars | What happened |
-| `image` | Image | Asset | No | Asset card | Image only | Optional event photo |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Chronological order |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `year` | Year | Short text | Yes | Max 10 chars | e.g., "1981", "2000-2001" |
+| `title` | Event Title | Short text | No | Max 100 chars | Brief event title (optional) |
+| `description` | Description | Long text | Yes | Max 500 chars | What happened |
+| `image` | Image | Media | No | Image only | Optional event photo |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Chronological order |
 
 ---
 
@@ -410,14 +446,14 @@ Enable these node types:
 **Name:** `Conference`
 **Description:** Conferences and congresses attended.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Conference Name | Symbol | Yes | Single line | Max 150 chars | Full conference title |
-| `year` | Year | Symbol | Yes | Single line | Max 10 chars | Year attended |
-| `location` | Location | Symbol | No | Single line | Max 80 chars | City, Country |
-| `description` | Description | Text | No | Multi-line (3 rows) | Max 300 chars | Additional details |
-| `isInternational` | International | Boolean | Yes | Boolean | Default: false | Flag for filtering |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Display order |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Conference Name | Short text | Yes | Max 150 chars | Full conference title |
+| `year` | Year | Short text | Yes | Max 10 chars | Year attended |
+| `location` | Location | Short text | No | Max 80 chars | City, Country |
+| `description` | Description | Long text | No | Max 300 chars | Additional details |
+| `isInternational` | International | Boolean | Yes | Default: false | Flag for filtering |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Display order |
 
 ---
 
@@ -427,16 +463,16 @@ Enable these node types:
 **Name:** `Project`
 **Description:** Association projects and programs.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Project Name | Symbol | Yes | Single line | Max 100 chars | Project title |
-| `slug` | URL Slug | Symbol | No | Slug | Unique | For individual project pages (optional) |
-| `description` | Description | Rich Text | Yes | Rich text | Enable: all | Full project description |
-| `objectives` | Objectives | Rich Text | No | Rich text | Enable: lists | Project goals |
-| `results` | Results | Rich Text | No | Rich text | Enable: all | Outcomes achieved |
-| `image` | Featured Image | Asset | No | Asset card | Image only | Project image |
-| `status` | Status | Symbol | Yes | Dropdown | Values: `active`, `completed`, `upcoming` | Current status |
-| `order` | Display Order | Integer | Yes | Number | 1-20 | Order in project list |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Project Name | Short text | Yes | Max 100 chars | Project title |
+| `slug` | URL Slug | Short text | No | Unique | For individual project pages (optional) |
+| `description` | Description | Long text | Yes | Appearance: Markdown | Full project description (supports Markdown) |
+| `objectives` | Objectives | Long text | No | Appearance: Markdown | Project goals (supports Markdown) |
+| `results` | Results | Long text | No | Appearance: Markdown | Outcomes achieved (supports Markdown) |
+| `image` | Featured Image | Media | No | Image only | Project image |
+| `status` | Status | Short text | Yes | Accept only: `active`, `completed`, `upcoming` | Current status |
+| `order` | Display Order | Number | Yes | Integer, 1-20 | Order in project list |
 
 ---
 
@@ -446,14 +482,14 @@ Enable these node types:
 **Name:** `Certificate`
 **Description:** Awards, certificates, and distinctions.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Certificate Name | Symbol | Yes | Single line | Max 150 chars | Name of award/certificate |
-| `issuingBody` | Issuing Organization | Symbol | No | Single line | Max 100 chars | Who issued it |
-| `date` | Date Issued | Date | No | Date only | - | When it was awarded |
-| `image` | Certificate Image | Asset | Yes | Asset card | Image only | Scan/photo of certificate |
-| `description` | Description | Text | No | Multi-line (3 rows) | Max 300 chars | What it certifies |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Gallery order |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Certificate Name | Short text | Yes | Max 150 chars | Name of award/certificate |
+| `issuingBody` | Issuing Organization | Short text | No | Max 100 chars | Who issued it |
+| `date` | Date Issued | Date | No | - | When it was awarded |
+| `image` | Certificate Image | Media | Yes | Image only | Scan/photo of certificate |
+| `description` | Description | Long text | No | Max 300 chars | What it certifies |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Gallery order |
 
 ---
 
@@ -463,15 +499,15 @@ Enable these node types:
 **Name:** `Press Clipping`
 **Description:** Media coverage and press mentions.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Article Title | Symbol | No | Single line | Max 150 chars | Article headline (if known) |
-| `publication` | Publication | Symbol | No | Single line | Max 80 chars | Magazine/newspaper name |
-| `date` | Publication Date | Date | No | Date only | - | When published |
-| `image` | Clipping Image | Asset | Yes | Asset card | Image only | Scan of the article |
-| `link` | Original Link | Symbol | No | Single line | URL format | Link to online version |
-| `excerpt` | Excerpt | Text | No | Multi-line (3 rows) | Max 300 chars | Brief summary or quote |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Gallery order |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Article Title | Short text | No | Max 150 chars | Article headline (if known) |
+| `publication` | Publication | Short text | No | Max 80 chars | Magazine/newspaper name |
+| `date` | Publication Date | Date | No | - | When published |
+| `image` | Clipping Image | Media | Yes | Image only | Scan of the article |
+| `link` | Original Link | Short text | No | URL format | Link to online version |
+| `excerpt` | Excerpt | Long text | No | Max 300 chars | Brief summary or quote |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Gallery order |
 
 ---
 
@@ -481,16 +517,16 @@ Enable these node types:
 **Name:** `Gallery`
 **Description:** Photo galleries and events.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `title` | Gallery Title | Symbol | Yes | Single line | Max 100 chars | Event/gallery name |
-| `slug` | URL Slug | Symbol | Yes | Slug | Unique | URL segment (e.g., "petrecere-2013") |
-| `description` | Description | Text | No | Multi-line (3 rows) | Max 300 chars | Event description |
-| `date` | Event Date | Date | No | Date only | - | When the event occurred |
-| `coverImage` | Cover Image | Asset | Yes | Asset card | Image only | Thumbnail for gallery list |
-| `images` | Gallery Images | Array of Assets | Yes | Asset gallery | Images only | All photos in gallery |
-| `featured` | Featured | Boolean | Yes | Boolean | Default: false | Show on homepage/gallery overview |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Order in gallery list |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Gallery Title | Short text | Yes | Max 100 chars | Event/gallery name |
+| `slug` | URL Slug | Short text | Yes | Unique | URL segment (e.g., "petrecere-2013") |
+| `description` | Description | Long text | No | Max 300 chars | Event description |
+| `date` | Event Date | Date | No | - | When the event occurred |
+| `coverImage` | Cover Image | Media | Yes | Image only | Thumbnail for gallery list |
+| `images` | Gallery Images | Media (many) | Yes | Images only | All photos in gallery |
+| `featured` | Featured | Boolean | Yes | Default: false | Show on homepage/gallery overview |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Order in gallery list |
 
 ---
 
@@ -500,12 +536,12 @@ Enable these node types:
 **Name:** `FAQ`
 **Description:** Frequently asked questions.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `question` | Question | Symbol | Yes | Single line | Max 200 chars | The question |
-| `answer` | Answer | Rich Text | Yes | Rich text | Enable: paragraphs, bold, italic, lists, links | The answer |
-| `category` | Category | Symbol | No | Dropdown | Values: `general`, `programs`, `safety`, `pricing`, `other` | For grouping |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Order within category |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `question` | Question | Short text | Yes | Max 200 chars | The question |
+| `answer` | Answer | Long text | Yes | Appearance: Markdown | The answer (supports Markdown) |
+| `category` | Category | Short text | No | Accept only: `general`, `programs`, `safety`, `pricing`, `other` | For grouping |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Order within category |
 
 ---
 
@@ -515,15 +551,52 @@ Enable these node types:
 **Name:** `Partner`
 **Description:** Partners and sponsors.
 
-| Field ID | Field Name | Type | Required | Appearance | Validation | Help Text |
-|----------|------------|------|----------|------------|------------|-----------|
-| `name` | Company Name | Symbol | Yes | Single line | Max 80 chars | Partner/sponsor name |
-| `logo` | Logo | Asset | Yes | Asset card | Image only | Company logo (transparent PNG preferred) |
-| `website` | Website | Symbol | No | Single line | URL format | Company website |
-| `partnerType` | Type | Symbol | Yes | Dropdown | Values: `partner`, `sponsor`, `endorsement` | Relationship type |
-| `description` | Description | Text | No | Multi-line (2 rows) | Max 200 chars | Brief description of partnership |
-| `active` | Active | Boolean | Yes | Boolean | Default: true | Currently active partnership |
-| `order` | Display Order | Integer | Yes | Number | 1-100 | Display order |
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `name` | Company Name | Short text | Yes | Max 80 chars | Partner/sponsor name |
+| `logo` | Logo | Media | Yes | Image only | Company logo (transparent PNG preferred) |
+| `website` | Website | Short text | No | URL format | Company website |
+| `partnerType` | Type | Short text | Yes | Accept only: `partner`, `sponsor`, `endorsement` | Relationship type |
+| `description` | Description | Long text | No | Max 200 chars | Brief description of partnership |
+| `active` | Active | Boolean | Yes | Default: true | Currently active partnership |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Display order |
+
+---
+
+### 3.20 PricingTier
+
+**Content Type ID:** `pricingTier`
+**Name:** `Pricing Tier`
+**Description:** Service pricing options by frequency and time slot.
+
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `internalName` | Internal Name | Short text | Yes | - | e.g., "Monthly 1x/week Morning" |
+| `period` | Period | Short text | Yes | Accept only: `monthly`, `semester`, `annual`, `single` | Billing period |
+| `frequency` | Frequency | Short text | Yes | Accept only: `1x/week`, `2x/week`, `single` | Sessions per week |
+| `timeSlot` | Time Slot | Short text | No | Accept only: `morning`, `afternoon`, `any` | Morning (09-16) or Afternoon (16-20) |
+| `price` | Price (EUR) | Number | Yes | Decimal, min 0 | Price in Euros |
+| `description` | Description | Short text | No | Max 100 chars | Optional description (e.g., "Best value") |
+| `service` | Service | Reference | No | Link to: Service | Which service this pricing applies to |
+| `highlighted` | Highlighted | Boolean | Yes | Default: false | Feature this tier prominently |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Order in pricing table |
+
+---
+
+### 3.21 SpecialPricing
+
+**Content Type ID:** `specialPricing`
+**Name:** `Special Pricing`
+**Description:** Special services with custom pricing (e.g., home visits).
+
+| Field ID | Field Name | Type | Required | Validation | Help Text |
+|----------|------------|------|----------|------------|-----------|
+| `title` | Title | Short text | Yes | Max 80 chars | e.g., "Metoda Sultana - Deplasare la domiciliu" |
+| `price` | Price (EUR) | Number | Yes | Decimal, min 0 | Price in Euros |
+| `unit` | Unit | Short text | Yes | Max 30 chars | e.g., "per ședință", "per oră" |
+| `notes` | Notes | Long text | No | Max 200 chars | Additional info (e.g., "+ transport") |
+| `service` | Service | Reference | No | Link to: Service | Related service |
+| `order` | Display Order | Number | Yes | Integer, 1-100 | Order in list |
 
 ---
 
@@ -548,8 +621,10 @@ Create in this exact order to handle references:
 15. **Gallery** (no dependencies)
 16. **FAQ** (no dependencies)
 17. **Partner** (no dependencies)
-18. **Page** (references Widget, self-reference)
-19. **Service** (references Widget, ServiceTab, AgeGroup, self-reference)
+18. **PricingTier** (references Service - create after Service exists, or leave reference empty initially)
+19. **SpecialPricing** (references Service - create after Service exists, or leave reference empty initially)
+20. **Page** (references Widget, self-reference)
+21. **Service** (references Widget, ServiceTab, AgeGroup, self-reference)
 
 ---
 
@@ -582,9 +657,9 @@ Generate a secure secret:
 openssl rand -hex 32
 ```
 
-Add to both Contentful webhook headers and Next.js `.env`:
+Add to both Contentful webhook headers and Next.js `.env.local`:
 ```env
-CONTENTFUL_WEBHOOK_SECRET=your_generated_secret
+REVALIDATE_SECRET=your_generated_secret
 ```
 
 ---
@@ -701,7 +776,9 @@ CONTENTFUL_ACCESS_TOKEN=your_delivery_token
 CONTENTFUL_PREVIEW_TOKEN=your_preview_token
 CONTENTFUL_MANAGEMENT_TOKEN=your_management_token
 CONTENTFUL_ENVIRONMENT=master
-CONTENTFUL_WEBHOOK_SECRET=your_webhook_secret
+
+# Webhook secret for ISR revalidation (must match Contentful webhook header)
+REVALIDATE_SECRET=your_webhook_secret
 
 # For local preview mode
 CONTENTFUL_PREVIEW_SECRET=your_preview_secret
@@ -713,7 +790,7 @@ CONTENTFUL_PREVIEW_SECRET=your_preview_secret
 
 - [ ] Create Contentful space
 - [ ] Configure Romanian locale
-- [ ] Create all 19 content models (in order)
+- [ ] Create all 21 content models (in order)
 - [ ] Generate API keys
 - [ ] Configure revalidation webhook
 - [ ] Upload logo and essential media
