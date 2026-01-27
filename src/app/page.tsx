@@ -9,6 +9,8 @@ import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { CTASection } from "@/components/sections/CTASection";
+import { WaveDivider } from "@/components/ui/WaveDivider";
+import { AnimatedSection } from "./HomePageSections";
 
 export default async function HomePage() {
   const [slides, services, testimonials] = await Promise.all([
@@ -24,15 +26,24 @@ export default async function HomePage() {
 
       {/* Stats Section */}
       <StatsSection variant="lagoon" />
+      <WaveDivider color="white" />
 
       {/* About Section */}
-      <AboutSection />
+      <AnimatedSection>
+        <AboutSection />
+      </AnimatedSection>
+      <WaveDivider color="sand" />
 
       {/* Services Section */}
-      <ServicesSection services={services} />
+      <AnimatedSection delay={100}>
+        <ServicesSection services={services} />
+      </AnimatedSection>
+      <WaveDivider color="white" />
 
       {/* Testimonials Section */}
-      <TestimonialsSection testimonials={testimonials} />
+      <AnimatedSection delay={100}>
+        <TestimonialsSection testimonials={testimonials} />
+      </AnimatedSection>
 
       {/* CTA Section */}
       <CTASection

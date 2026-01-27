@@ -130,7 +130,7 @@ function HeroFallback() {
               href="/contact"
               variant="outline"
               size="lg"
-              className="border-white/30 text-white hover:bg-white/10"
+              className="border-white/60 text-white hover:bg-white/20"
             >
               Contactează-ne
             </Button>

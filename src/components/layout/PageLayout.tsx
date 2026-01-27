@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { WaveDivider } from "@/components/ui/WaveDivider";
 import { Sidebar } from "./Sidebar";
 import type { Widget, ContentfulImage } from "@/types/contentful";
 
@@ -53,10 +54,10 @@ export function PageLayout({
               src={heroImage.url}
               alt={heroImageAlt || heroImage.title || title}
               fill
-              className="object-cover opacity-30"
+              className="object-cover opacity-40"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-lagoon-900/70 to-lagoon-800/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-lagoon-900/60 to-lagoon-800/30" />
           </>
         )}
         <Container className="relative z-10 flex min-h-[280px] flex-col justify-center py-12">
@@ -102,6 +103,9 @@ export function PageLayout({
             )}
           </div>
         </Container>
+        <div className="absolute bottom-0 left-0 right-0">
+          <WaveDivider color="white" />
+        </div>
       </section>
 
       {/* Main Content */}
@@ -155,10 +159,10 @@ export function SectionHero({
             src={heroImage.url}
             alt={heroImage.title || title}
             fill
-            className="object-cover opacity-30"
+            className="object-cover opacity-40"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-lagoon-900/70 to-lagoon-800/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-lagoon-900/60 to-lagoon-800/30" />
         </>
       )}
       <Container className="relative z-10 flex min-h-[300px] flex-col items-center justify-center py-16 text-center md:min-h-[350px]">
@@ -172,6 +176,9 @@ export function SectionHero({
         )}
         {children}
       </Container>
+      <div className="absolute bottom-0 left-0 right-0">
+        <WaveDivider color="white" />
+      </div>
     </section>
   );
 }

@@ -58,7 +58,7 @@ export function CTASection({
                   href={secondaryButton.href}
                   variant="outline"
                   size="lg"
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="border-white/60 text-white hover:bg-white/20"
                 >
                   {secondaryButton.label}
                 </Button>
@@ -76,6 +76,9 @@ export function CTASection({
         {/* Decorative elements */}
         <div className="absolute -left-20 -top-20 h-60 w-60 rounded-full bg-white/10" />
         <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-white/10" />
+        <div className="absolute left-1/4 top-1/4 h-16 w-16 rounded-full bg-white/5" />
+        <div className="absolute right-1/3 bottom-1/4 h-12 w-12 rounded-full bg-white/5" />
+        <div className="absolute left-1/2 -top-6 h-24 w-24 rounded-full bg-white/5" />
 
         <div className="relative z-10 px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="mx-auto max-w-3xl text-center">
@@ -96,7 +99,7 @@ export function CTASection({
                   href={secondaryButton.href}
                   variant="outline"
                   size="lg"
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="border-white/60 text-white hover:bg-white/20"
                 >
                   {secondaryButton.label}
                 </Button>

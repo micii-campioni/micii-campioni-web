@@ -48,6 +48,7 @@ export function Carousel({
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -76,7 +77,7 @@ export function Carousel({
 
   // Autoplay
   useEffect(() => {
-    if (!autoplay || !emblaApi) return;
+    if (!autoplay || !emblaApi || isPaused) return;
 
     const interval = setInterval(() => {
       if (emblaApi.canScrollNext()) {
@@ -87,10 +88,14 @@ export function Carousel({
     }, autoplayInterval);
 
     return () => clearInterval(interval);
-  }, [emblaApi, autoplay, autoplayInterval, loop]);
+  }, [emblaApi, autoplay, autoplayInterval, loop, isPaused]);
 
   return (
-    <div className={cn("relative", className)}>
+    <div
+      className={cn("relative", className)}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       {/* Main carousel viewport */}
       <div ref={emblaRef} className="overflow-hidden">
         <div className="flex">

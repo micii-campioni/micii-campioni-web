@@ -55,9 +55,14 @@ export function StatsSection({
       <Section
         background="lagoon"
         spacing="lg"
-        className="bg-gradient-to-br from-lagoon-600 to-lagoon-700"
+        className="relative bg-gradient-to-br from-lagoon-600 to-lagoon-700 overflow-hidden"
       >
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Coral-tinted decorative circles */}
+        <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-coral-400/10" aria-hidden="true" />
+        <div className="absolute -left-8 -bottom-8 h-32 w-32 rounded-full bg-coral-500/10" aria-hidden="true" />
+        <div className="absolute left-1/3 -top-6 h-20 w-20 rounded-full bg-coral-300/10" aria-hidden="true" />
+
+        <div className="relative grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="font-heading text-4xl font-bold text-white md:text-5xl">

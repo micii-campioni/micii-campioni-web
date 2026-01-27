@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { Button } from "@/components/ui/Button";
@@ -23,8 +24,12 @@ export interface HeaderProps {
 // =============================================================================
 
 export function Header({ navigation, siteSettings }: HeaderProps) {
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(href + "/");
 
   // Handle scroll for sticky header styling
   useEffect(() => {
@@ -53,7 +58,9 @@ export function Header({ navigation, siteSettings }: HeaderProps) {
     };
   }, [isMenuOpen]);
 
-  const navItems = navigation?.items || [];
+  const navItems = (navigation?.items || []).filter(
+    (item) => item.href !== "/contact"
+  );
 
   return (
     <>
@@ -130,8 +137,11 @@ export function Header({ navigation, siteSettings }: HeaderProps) {
                     <Link
                       href={item.href}
                       className={cn(
-                        "font-medium text-sand-700 transition-colors hover:text-lagoon-600",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-500 focus-visible:ring-offset-2"
+                        "relative font-medium transition-colors hover:text-lagoon-600",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-500 focus-visible:ring-offset-2",
+                        isActive(item.href)
+                          ? "text-lagoon-600 after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-0.5 after:rounded-full after:bg-lagoon-500"
+                          : "text-sand-700"
                       )}
                     >
                       {item.label}
@@ -181,8 +191,11 @@ export function Header({ navigation, siteSettings }: HeaderProps) {
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
                   className={cn(
-                    "block rounded-xl px-4 py-3 font-medium text-sand-700 transition-colors hover:bg-sand-50 hover:text-lagoon-600",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-500"
+                    "block rounded-xl px-4 py-3 font-medium transition-colors",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-500",
+                    isActive(item.href)
+                      ? "bg-lagoon-50 text-lagoon-600 font-semibold"
+                      : "text-sand-700 hover:bg-sand-50 hover:text-lagoon-600"
                   )}
                 >
                   {item.label}

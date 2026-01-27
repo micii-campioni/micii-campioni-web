@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Check } from "lucide-react";
+import { cn } from "@/lib/utils/cn";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 
@@ -52,9 +53,7 @@ export function AboutSection({
   return (
     <Section background="white" spacing="xl">
       <div
-        className={`grid items-center gap-12 lg:grid-cols-2 ${
-          reverse ? "lg:flex-row-reverse" : ""
-        }`}
+        className={`grid items-center gap-12 lg:grid-cols-2`}
       >
         {/* Image */}
         <div
@@ -71,12 +70,36 @@ export function AboutSection({
                 className="object-cover"
               />
             ) : (
-              <div className="flex h-full items-center justify-center bg-gradient-to-br from-lagoon-100 to-lagoon-200">
-                <div className="text-center">
-                  <span className="text-6xl">🏊</span>
-                  <p className="mt-4 font-heading text-lg font-semibold text-lagoon-600">
+              <div className="relative flex h-full items-center justify-center overflow-hidden bg-gradient-to-br from-lagoon-100 to-lagoon-200">
+                {/* Layered wave SVGs */}
+                <svg className="absolute bottom-0 left-0 right-0 h-24 text-lagoon-300/40" viewBox="0 0 1440 96" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 48C240 16 480 80 720 48C960 16 1200 80 1440 48V96H0V48Z" fill="currentColor" />
+                </svg>
+                <svg className="absolute bottom-0 left-0 right-0 h-16 text-lagoon-200/60" viewBox="0 0 1440 64" fill="none" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 32C360 0 720 64 1080 32C1260 16 1380 24 1440 32V64H0V32Z" fill="currentColor" />
+                </svg>
+
+                {/* Scattered bubbles */}
+                <div className="absolute left-[10%] top-[15%] h-4 w-4 rounded-full bg-lagoon-300/30" />
+                <div className="absolute left-[25%] top-[25%] h-3 w-3 rounded-full bg-coral-300/30" />
+                <div className="absolute right-[15%] top-[20%] h-5 w-5 rounded-full bg-lagoon-400/20" />
+                <div className="absolute right-[30%] top-[10%] h-2.5 w-2.5 rounded-full bg-coral-400/25" />
+                <div className="absolute left-[15%] bottom-[35%] h-3 w-3 rounded-full bg-lagoon-300/25" />
+                <div className="absolute right-[20%] bottom-[40%] h-4 w-4 rounded-full bg-coral-300/20" />
+
+                {/* Centered swimmer icon */}
+                <div className="relative z-10 text-center">
+                  <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/80 shadow-soft">
+                    <svg className="h-10 w-10 text-lagoon-600" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M4 28C8 24 14 32 20 28C26 24 32 32 36 28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                      <path d="M4 22C8 18 14 26 20 22C26 18 32 26 36 22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
+                      <circle cx="20" cy="13" r="4" fill="currentColor" />
+                    </svg>
+                  </div>
+                  <p className="mt-4 font-heading text-lg font-semibold text-lagoon-700">
                     Micii Campioni
                   </p>
+                  <p className="text-sm text-lagoon-500">Educație Acvatică</p>
                 </div>
               </div>
             )}
@@ -104,14 +127,20 @@ export function AboutSection({
           {/* Features list */}
           {features.length > 0 && (
             <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {features.map((feature) => (
-                <li key={feature} className="flex items-start gap-3">
-                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-lagoon-100">
-                    <Check className="h-4 w-4 text-lagoon-600" />
-                  </span>
-                  <span className="text-sand-700">{feature}</span>
-                </li>
-              ))}
+              {features.map((feature, index) => {
+                const isCoral = (index + 1) % 3 === 0;
+                return (
+                  <li key={feature} className="flex items-start gap-3">
+                    <span className={cn(
+                      "flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full",
+                      isCoral ? "bg-coral-100" : "bg-lagoon-100"
+                    )}>
+                      <Check className={cn("h-4 w-4", isCoral ? "text-coral-600" : "text-lagoon-600")} />
+                    </span>
+                    <span className="text-sand-700">{feature}</span>
+                  </li>
+                );
+              })}
             </ul>
           )}
 

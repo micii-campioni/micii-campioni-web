@@ -94,6 +94,12 @@ export {
   type LoadingScreenProps,
 } from "./Spinner";
 
+// WaveDivider
+export { WaveDivider } from "./WaveDivider";
+
+// AnimateOnScroll
+export { AnimateOnScroll } from "./AnimateOnScroll";
+
 // Tabs
 export {
   Tabs,

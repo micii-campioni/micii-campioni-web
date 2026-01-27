@@ -24,9 +24,9 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
 const spacingStyles: Record<SectionSpacing, string> = {
   none: "",
   sm: "py-8 md:py-12",
-  md: "py-12 md:py-16",
-  lg: "py-16 md:py-24",
-  xl: "py-20 md:py-32",
+  md: "py-10 md:py-14",
+  lg: "py-12 md:py-16",
+  xl: "py-16 md:py-24",
 };
 
 const backgroundStyles: Record<SectionBackground, string> = {
@@ -76,6 +76,7 @@ interface SectionHeaderProps extends HTMLAttributes<HTMLDivElement> {
   subtitle?: string;
   description?: string;
   align?: "left" | "center";
+  accent?: "lagoon" | "coral";
   children?: ReactNode;
 }
 
@@ -84,6 +85,7 @@ export function SectionHeader({
   subtitle,
   description,
   align = "center",
+  accent = "lagoon",
   className,
   children,
   ...props
@@ -98,7 +100,10 @@ export function SectionHeader({
       {...props}
     >
       {subtitle && (
-        <span className="mb-2 inline-block font-heading text-sm font-semibold uppercase tracking-wider text-lagoon-600">
+        <span className={cn(
+          "mb-2 inline-block font-heading text-sm font-semibold uppercase tracking-wider",
+          accent === "coral" ? "text-coral-600" : "text-lagoon-600"
+        )}>
           {subtitle}
         </span>
       )}

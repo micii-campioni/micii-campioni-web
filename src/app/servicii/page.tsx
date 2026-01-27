@@ -4,6 +4,7 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { Container } from "@/components/ui/Container";
+import { WaveDivider } from "@/components/ui/WaveDivider";
 
 export const metadata: Metadata = {
   title: "Servicii - Cursuri de Înot pentru Copii",
@@ -23,7 +24,7 @@ export default async function ServicesListPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-lagoon-600 to-lagoon-700 py-16 md:py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-lagoon-600 to-lagoon-700 py-16 md:py-24">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="font-heading text-4xl font-bold text-white md:text-5xl">
@@ -35,6 +36,9 @@ export default async function ServicesListPage() {
             </p>
           </div>
         </Container>
+        <div className="absolute bottom-0 left-0 right-0">
+          <WaveDivider color="white" />
+        </div>
       </section>
 
       {/* Services Grid */}

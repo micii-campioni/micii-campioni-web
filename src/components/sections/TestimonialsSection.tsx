@@ -32,7 +32,7 @@ export function TestimonialsSection({
 
   return (
     <Section background="white" spacing="xl">
-      <SectionHeader title={title} subtitle={subtitle} description={description} />
+      <SectionHeader title={title} subtitle={subtitle} description={description} accent="coral" />
 
       {testimonials.length <= 3 ? (
         // Grid layout for few testimonials
