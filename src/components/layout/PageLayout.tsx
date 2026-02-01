@@ -44,8 +44,36 @@ export function PageLayout({
 }: PageLayoutProps) {
   const hasSidebar = sidebarWidgets && sidebarWidgets.length > 0;
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://miciicampioni.ro";
+
+  const breadcrumbJsonLd =
+    breadcrumbs && breadcrumbs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Acasă", item: siteUrl },
+            ...breadcrumbs.map((crumb, i) => ({
+              "@type": "ListItem" as const,
+              position: i + 2,
+              name: crumb.label,
+              item: `${siteUrl}${crumb.href}`,
+            })),
+          ],
+        }
+      : null;
+
   return (
     <>
+      {breadcrumbJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbJsonLd),
+          }}
+        />
+      )}
+
       {/* Hero Section */}
       <section className="relative min-h-[280px] overflow-hidden bg-gradient-to-br from-lagoon-600 to-lagoon-700">
         {heroImage && (
@@ -54,6 +82,7 @@ export function PageLayout({
               src={heroImage.url}
               alt={heroImageAlt || heroImage.title || title}
               fill
+              sizes="100vw"
               className="object-cover opacity-40"
               priority
             />
@@ -159,6 +188,7 @@ export function SectionHero({
             src={heroImage.url}
             alt={heroImage.title || title}
             fill
+            sizes="100vw"
             className="object-cover opacity-40"
             priority
           />

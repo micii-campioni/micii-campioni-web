@@ -44,6 +44,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: page.metaTitle || page.title,
       description: page.metaDescription,
+      images: page.heroImage
+        ? [{ url: page.heroImage.url, width: page.heroImage.width, height: page.heroImage.height, alt: page.heroImage.title }]
+        : undefined,
     },
   };
 }

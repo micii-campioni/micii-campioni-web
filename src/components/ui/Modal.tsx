@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -49,6 +49,9 @@ export function Modal({
 }: ModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
+  const id = useId();
+  const titleId = `${id}-title`;
+  const descriptionId = `${id}-description`;
 
   // Handle open/close
   useEffect(() => {
@@ -97,6 +100,8 @@ export function Modal({
     <dialog
       ref={dialogRef}
       onClick={handleBackdropClick}
+      aria-labelledby={title ? titleId : undefined}
+      aria-describedby={description ? descriptionId : undefined}
       className={cn(
         "fixed inset-0 z-500 m-0 h-full w-full max-w-none max-h-none bg-transparent p-4 backdrop:bg-black/50 backdrop:backdrop-blur-sm",
         "open:flex open:items-center open:justify-center"
@@ -117,12 +122,12 @@ export function Modal({
           <div className="mb-4 flex items-start justify-between">
             <div>
               {title && (
-                <h2 className="font-heading text-xl font-semibold text-sand-900">
+                <h2 id={titleId} className="font-heading text-xl font-semibold text-sand-900">
                   {title}
                 </h2>
               )}
               {description && (
-                <p className="mt-1 text-sm text-sand-600">{description}</p>
+                <p id={descriptionId} className="mt-1 text-sm text-sand-600">{description}</p>
               )}
             </div>
             {showCloseButton && (

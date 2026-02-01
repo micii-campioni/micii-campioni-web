@@ -1,26 +1,101 @@
 import type { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import { getSiteSettings } from "@/lib/contentful/queries";
+import { getSiteSettings, getPageBySlug } from "@/lib/contentful/queries";
+import { SectionHero } from "@/components/layout/PageLayout";
 import { Section } from "@/components/ui/Section";
-import { Container } from "@/components/ui/Container";
 import { Card } from "@/components/ui/Card";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { RichText } from "@/lib/contentful/rich-text";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Contactează-ne pentru informații despre cursurile de înot, programări sau orice alte întrebări. Suntem aici să te ajutăm.",
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    title: "Contactează Micii Campioni",
-    description:
-      "Contactează-ne pentru informații despre cursurile de înot, programări sau orice alte întrebări. Suntem aici să te ajutăm.",
-  },
-};
+// =============================================================================
+// Helpers
+// =============================================================================
+
+/** Parse a schedule string like "9:00 - 20:00" into { opens, closes }. */
+function parseScheduleTimes(schedule: string): {
+  opens: string;
+  closes: string;
+} | null {
+  const match = schedule.match(/(\d{1,2}:\d{2})\s*[-–]\s*(\d{1,2}:\d{2})/);
+  if (!match) return null;
+  const pad = (t: string) => (t.length === 4 ? `0${t}` : t);
+  return { opens: pad(match[1]), closes: pad(match[2]) };
+}
+
+// =============================================================================
+// Metadata
+// =============================================================================
+
+const FALLBACK_TITLE = "Contact";
+const FALLBACK_DESCRIPTION =
+  "Contactează-ne pentru informații despre cursurile de înot, programări sau orice alte întrebări. Suntem aici să te ajutăm.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageBySlug("contact");
+
+  return {
+    title: page?.metaTitle || FALLBACK_TITLE,
+    description: page?.metaDescription || FALLBACK_DESCRIPTION,
+    alternates: { canonical: "/contact" },
+    openGraph: {
+      title: page?.metaTitle || `Contactează Micii Campioni`,
+      description: page?.metaDescription || FALLBACK_DESCRIPTION,
+      images: page?.heroImage
+        ? [{ url: page.heroImage.url, width: page.heroImage.width, height: page.heroImage.height, alt: page.heroImage.title }]
+        : undefined,
+    },
+  };
+}
+
+// =============================================================================
+// Page
+// =============================================================================
 
 export default async function ContactPage() {
-  const settings = await getSiteSettings();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://miciicampioni.ro";
+  const [settings, page] = await Promise.all([
+    getSiteSettings(),
+    getPageBySlug("contact"),
+  ]);
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://miciicampioni.ro";
+
+  // Schedule values from Contentful with fallbacks
+  const scheduleWeekdays =
+    settings?.scheduleWeekdays || "Luni - Vineri: 9:00 - 20:00";
+  const scheduleSaturday =
+    settings?.scheduleSaturday || "Sâmbătă: 9:00 - 14:00";
+  const scheduleSunday = settings?.scheduleSunday || "Duminică: Închis";
+
+  // Build opening hours from dynamic schedule
+  const openingHoursSpecification: object[] = [];
+  const weekdayTimes = parseScheduleTimes(scheduleWeekdays);
+  if (weekdayTimes) {
+    openingHoursSpecification.push({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: weekdayTimes.opens,
+      closes: weekdayTimes.closes,
+    });
+  }
+  const saturdayTimes = parseScheduleTimes(scheduleSaturday);
+  if (saturdayTimes) {
+    openingHoursSpecification.push({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: saturdayTimes.opens,
+      closes: saturdayTimes.closes,
+    });
+  }
+  const sundayTimes = parseScheduleTimes(scheduleSunday);
+  if (sundayTimes) {
+    openingHoursSpecification.push({
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Sunday",
+      opens: sundayTimes.opens,
+      closes: sundayTimes.closes,
+    });
+  }
 
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
@@ -48,20 +123,10 @@ export default async function ContactPage() {
             longitude: settings.gpsLongitude,
           }
         : undefined,
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "09:00",
-        closes: "20:00",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: "Saturday",
-        opens: "09:00",
-        closes: "14:00",
-      },
-    ],
+    openingHoursSpecification:
+      openingHoursSpecification.length > 0
+        ? openingHoursSpecification
+        : undefined,
   };
 
   return (
@@ -72,20 +137,24 @@ export default async function ContactPage() {
           __html: JSON.stringify(localBusinessJsonLd),
         }}
       />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-lagoon-600 to-lagoon-700 py-16 md:py-24">
-        <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="font-heading text-4xl font-bold text-white md:text-5xl">
-              Contactează-ne
-            </h1>
-            <p className="mt-4 text-lg text-lagoon-100 md:text-xl">
-              Suntem aici să răspundem la toate întrebările tale. Completează
-              formularul sau folosește una din metodele de contact de mai jos.
-            </p>
+      <SectionHero
+        title={page?.title || "Contactează-ne"}
+        subtitle="Suntem aici să răspundem la toate întrebările tale. Completează formularul sau folosește una din metodele de contact de mai jos."
+        heroImage={page?.heroImage}
+      />
+
+      {/* Rich Text Content from Contentful */}
+      {page?.content && (
+        <Section background="white" spacing="lg">
+          <div className="mx-auto max-w-4xl">
+            <div className="prose max-w-none">
+              <RichText content={page.content} />
+            </div>
           </div>
-        </Container>
-      </section>
+        </Section>
+      )}
 
       {/* Contact Info + Form */}
       <Section background="sand" spacing="xl">
@@ -98,7 +167,11 @@ export default async function ContactPage() {
 
             {/* Phone */}
             {settings?.phone && (
-              <Card variant="default" padding="md" className="flex items-start gap-4">
+              <Card
+                variant="default"
+                padding="md"
+                className="flex items-start gap-4"
+              >
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-lagoon-100">
                   <Phone className="h-6 w-6 text-lagoon-600" />
                 </div>
@@ -116,7 +189,11 @@ export default async function ContactPage() {
 
             {/* Email */}
             {settings?.email && (
-              <Card variant="default" padding="md" className="flex items-start gap-4">
+              <Card
+                variant="default"
+                padding="md"
+                className="flex items-start gap-4"
+              >
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-lagoon-100">
                   <Mail className="h-6 w-6 text-lagoon-600" />
                 </div>
@@ -134,7 +211,11 @@ export default async function ContactPage() {
 
             {/* Address */}
             {settings?.address && (
-              <Card variant="default" padding="md" className="flex items-start gap-4">
+              <Card
+                variant="default"
+                padding="md"
+                className="flex items-start gap-4"
+              >
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-lagoon-100">
                   <MapPin className="h-6 w-6 text-lagoon-600" />
                 </div>
@@ -146,15 +227,19 @@ export default async function ContactPage() {
             )}
 
             {/* Working Hours */}
-            <Card variant="default" padding="md" className="flex items-start gap-4">
+            <Card
+              variant="default"
+              padding="md"
+              className="flex items-start gap-4"
+            >
               <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-lagoon-100">
                 <Clock className="h-6 w-6 text-lagoon-600" />
               </div>
               <div>
                 <h3 className="font-semibold text-sand-900">Program</h3>
-                <p className="text-sand-600">Luni - Vineri: 9:00 - 20:00</p>
-                <p className="text-sand-600">Sâmbătă: 9:00 - 14:00</p>
-                <p className="text-sand-600">Duminică: Închis</p>
+                <p className="text-sand-600">{scheduleWeekdays}</p>
+                <p className="text-sand-600">{scheduleSaturday}</p>
+                <p className="text-sand-600">{scheduleSunday}</p>
               </div>
             </Card>
           </div>
@@ -176,11 +261,13 @@ export default async function ContactPage() {
         <Section background="white" spacing="lg" noContainer>
           <div className="h-[400px] w-full">
             <iframe
-              src={`https://www.openstreetmap.org/export/embed.html?bbox=${settings.gpsLongitude - 0.005},${settings.gpsLatitude - 0.003},${settings.gpsLongitude + 0.005},${settings.gpsLatitude + 0.003}&layer=mapnik&marker=${settings.gpsLatitude},${settings.gpsLongitude}`}
+              src={`https://www.google.com/maps?q=${settings.gpsLatitude},${settings.gpsLongitude}&z=15&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0 }}
+              allowFullScreen
               loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
               title="Locația Micii Campioni"
             />
           </div>

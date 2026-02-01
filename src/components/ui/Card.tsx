@@ -77,29 +77,29 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       className
     );
 
-    const content = (
+    const content = image ? (
       <>
-        {image && (
-          <div
-            className={cn(
-              "relative w-full overflow-hidden",
-              aspectRatioStyles[image.aspectRatio || "video"]
-            )}
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill={!image.width}
-              width={image.width}
-              height={image.height}
-              className="object-cover"
-            />
-          </div>
-        )}
+        <div
+          className={cn(
+            "relative w-full overflow-hidden",
+            aspectRatioStyles[image.aspectRatio || "video"]
+          )}
+        >
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill={!image.width}
+            width={image.width}
+            height={image.height}
+            className="object-cover"
+          />
+        </div>
         {children && (
-          <div className={cn(image && paddingStyles[padding])}>{children}</div>
+          <div className={cn(paddingStyles[padding])}>{children}</div>
         )}
       </>
+    ) : (
+      children
     );
 
     if (href) {
@@ -114,6 +114,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             className={cn(classes, "block")}
           >
             {content}
+            <span className="sr-only"> (deschide în fereastră nouă)</span>
           </a>
         );
       }

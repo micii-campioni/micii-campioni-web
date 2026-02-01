@@ -19,13 +19,13 @@ export interface AvatarProps {
 // Styles
 // =============================================================================
 
-const sizeStyles: Record<AvatarSize, { container: string; text: string }> = {
-  xs: { container: "h-6 w-6", text: "text-xs" },
-  sm: { container: "h-8 w-8", text: "text-sm" },
-  md: { container: "h-10 w-10", text: "text-base" },
-  lg: { container: "h-12 w-12", text: "text-lg" },
-  xl: { container: "h-16 w-16", text: "text-xl" },
-  "2xl": { container: "h-24 w-24", text: "text-3xl" },
+const sizeStyles: Record<AvatarSize, { container: string; text: string; px: number }> = {
+  xs: { container: "h-6 w-6", text: "text-xs", px: 24 },
+  sm: { container: "h-8 w-8", text: "text-sm", px: 32 },
+  md: { container: "h-10 w-10", text: "text-base", px: 40 },
+  lg: { container: "h-12 w-12", text: "text-lg", px: 48 },
+  xl: { container: "h-16 w-16", text: "text-xl", px: 64 },
+  "2xl": { container: "h-24 w-24", text: "text-3xl", px: 96 },
 };
 
 // =============================================================================
@@ -55,6 +55,7 @@ export function Avatar({
           src={src}
           alt={alt}
           fill
+          sizes={`${styles.px}px`}
           className="object-cover"
         />
       ) : (

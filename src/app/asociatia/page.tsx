@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Heart, FolderKanban, Mic2, Handshake } from "lucide-react";
-import { getPageBySlug, getPagesByParentSlug, getProjects } from "@/lib/contentful/queries";
+import { getPageBySlug, getProjects } from "@/lib/contentful/queries";
 import { SectionHero } from "@/components/layout/PageLayout";
 import { Section } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";

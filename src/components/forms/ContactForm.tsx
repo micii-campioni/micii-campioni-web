@@ -59,16 +59,23 @@ export function ContactForm() {
     setErrorMessage("");
 
     try {
+      // Read honeypot value from the actual DOM input
+      const form = e.target as HTMLFormElement;
+      const honeypot = (form.elements.namedItem("website") as HTMLInputElement)?.value || "";
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, website: honeypot }),
       });
 
       if (!response.ok) {
-        throw new Error("A apărut o eroare. Te rugăm să încerci din nou.");
+        const body = await response.json().catch(() => null);
+        throw new Error(
+          body?.error || "A apărut o eroare. Te rugăm să încerci din nou."
+        );
       }
 
       setStatus("success");
@@ -91,7 +98,7 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="rounded-xl bg-emerald-50 p-8 text-center">
+      <div role="status" className="rounded-xl bg-emerald-50 p-8 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
           <svg
             className="h-8 w-8 text-emerald-600"
@@ -165,6 +172,16 @@ export function ContactForm() {
           placeholder="Selectează un serviciu"
         />
       </div>
+
+      {/* Honeypot field — hidden from real users */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{ display: "none" }}
+      />
 
       <Textarea
         label="Mesaj *"

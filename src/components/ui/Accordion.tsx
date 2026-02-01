@@ -130,6 +130,7 @@ export function AccordionTrigger({ children, className }: AccordionTriggerProps)
   return (
     <button
       type="button"
+      id={`accordion-trigger-${id}`}
       onClick={() => toggleItem(id)}
       className={cn(
         "flex w-full items-center justify-between py-4 text-left font-medium text-sand-900 transition-colors hover:text-lagoon-600",

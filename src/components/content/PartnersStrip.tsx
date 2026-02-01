@@ -57,6 +57,7 @@ function PartnerLogo({ partner }: PartnerLogoProps) {
         src={partner.logo.url}
         alt={partner.name}
         fill
+        sizes="128px"
         className="object-contain"
       />
     </div>
@@ -163,6 +164,7 @@ function PartnerCard({ partner }: PartnerCardProps) {
           src={partner.logo.url}
           alt={partner.name}
           fill
+          sizes="64px"
           className="object-contain"
         />
       </div>
