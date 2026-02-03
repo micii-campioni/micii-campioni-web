@@ -16,8 +16,9 @@ export function WhatsAppButton({ phone }: WhatsAppButtonProps) {
   }, []);
 
   const cleanPhone = phone.replace(/[\s\-()]/g, "");
+  const fullPhone = cleanPhone.startsWith("+") ? cleanPhone : `+40${cleanPhone.replace(/^0+/, "")}`;
   const greeting = encodeURIComponent("Bună ziua! Aș dori mai multe informații.");
-  const href = `https://wa.me/${cleanPhone}?text=${greeting}`;
+  const href = `https://wa.me/${fullPhone}?text=${greeting}`;
 
   return (
     <a
