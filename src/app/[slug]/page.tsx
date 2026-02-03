@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { getPageBySlug, getAllPageSlugs } from "@/lib/contentful/queries";
 import { RichText } from "@/lib/contentful/rich-text";
+import { PageLayout } from "@/components/layout/PageLayout";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { CTASection } from "@/components/sections/CTASection";
@@ -61,6 +62,34 @@ export default async function GenericPage({ params }: Props) {
 
   if (!page) {
     notFound();
+  }
+
+  const hasSidebar = page.sidebarWidgets && page.sidebarWidgets.length > 0;
+
+  if (hasSidebar) {
+    return (
+      <>
+        <PageLayout
+          title={page.title}
+          heroImage={page.heroImage}
+          heroImageAlt={page.heroImageAlt}
+          sidebarWidgets={page.sidebarWidgets}
+        >
+          {page.content && (
+            <div className="prose max-w-none">
+              <RichText content={page.content} />
+            </div>
+          )}
+        </PageLayout>
+
+        <CTASection
+          title="Ai întrebări?"
+          description="Suntem aici să te ajutăm. Contactează-ne pentru mai multe informații."
+          primaryButton={{ label: "Contactează-ne", href: "/contact" }}
+          variant="default"
+        />
+      </>
+    );
   }
 
   return (

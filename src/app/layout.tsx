@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { getNavigation, getSiteSettings } from "@/lib/contentful/queries";
 import "./globals.css";
 
@@ -127,6 +128,9 @@ export default async function RootLayout({
         <Header navigation={headerNav} siteSettings={siteSettings} />
         <main id="main-content">{children}</main>
         <Footer navigation={headerNav} siteSettings={siteSettings} />
+        {siteSettings?.phone && (
+          <WhatsAppButton phone={siteSettings.phone} />
+        )}
       </body>
     </html>
   );

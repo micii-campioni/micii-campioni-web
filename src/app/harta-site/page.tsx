@@ -33,10 +33,10 @@ const siteStructure = [
     description: "Informații despre clubul nostru",
     children: [
       { title: "Istoric", href: "/despre-noi/istoric" },
-      { title: "Siguranță și Securitate", href: "/despre-noi/siguranta" },
-      { title: "Echipa", href: "/despre-noi/echipa" },
+      { title: "Siguranță și Securitate", href: "/despre-noi/siguranta-si-securitate-pentru-copilul-tau" },
+      { title: "Echipa", href: "/despre-noi/echipa-micii-campioni" },
       { title: "Press Info", href: "/despre-noi/press-info" },
-      { title: "Distincții și Certificări", href: "/despre-noi/distinctii" },
+      { title: "Distincții și Certificări", href: "/despre-noi/distinctii-si-certificari" },
     ],
   },
   {

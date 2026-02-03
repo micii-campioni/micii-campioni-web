@@ -158,7 +158,7 @@ export default async function DespreNoiPage() {
               </h2>
               <CompactTeamList members={teamMembers} limit={3} />
               <Link
-                href="/despre-noi/echipa"
+                href="/despre-noi/echipa-micii-campioni"
                 className="mt-6 inline-flex items-center text-lagoon-600 hover:text-lagoon-700"
               >
                 Cunoaște întreaga echipă
