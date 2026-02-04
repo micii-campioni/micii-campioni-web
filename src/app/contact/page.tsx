@@ -211,19 +211,29 @@ export default async function ContactPage() {
 
             {/* Address */}
             {settings?.address && (
-              <Card
-                variant="default"
-                padding="md"
-                className="flex items-start gap-4"
+              <a
+                href={
+                  settings.gpsLatitude && settings.gpsLongitude
+                    ? `https://www.google.com/maps/search/?api=1&query=${settings.gpsLatitude},${settings.gpsLongitude}`
+                    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-lagoon-100">
-                  <MapPin className="h-6 w-6 text-lagoon-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sand-900">Adresă</h3>
-                  <p className="text-sand-600">{settings.address}</p>
-                </div>
-              </Card>
+                <Card
+                  variant="default"
+                  padding="md"
+                  className="flex items-start gap-4 transition-colors hover:bg-lagoon-50"
+                >
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-lagoon-100">
+                    <MapPin className="h-6 w-6 text-lagoon-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sand-900">Adresă</h3>
+                    <p className="text-sand-600">{settings.address}</p>
+                  </div>
+                </Card>
+              </a>
             )}
 
             {/* Working Hours */}
